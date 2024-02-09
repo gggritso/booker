@@ -7,7 +7,11 @@ def index(request):
     return JsonResponse(
         {
             "books": [
-                {"id": book.id, "name": book.title, "author": book.author}
+                {
+                    "id": book.id,
+                    "name": book.title,
+                    "author": {"id": book.author.id, "name": book.author.name},
+                }
                 for book in books
             ]
         }
