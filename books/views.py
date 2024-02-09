@@ -9,7 +9,7 @@ def index(request):
             "books": [
                 {
                     "id": book.id,
-                    "name": book.title,
+                    "title": book.title,
                     "author": {"id": book.author.id, "name": book.author.name},
                 }
                 for book in books
