@@ -1,6 +1,9 @@
 from django.http import JsonResponse
+from .models import Book
 
-# Create your views here.
 
 def index(request):
-    return JsonResponse({"books": []})
+    books = Book.objects.all()[:10]
+    return JsonResponse(
+        {"books": [{"name": book.title, "author": book.author} for book in books]}
+    )
