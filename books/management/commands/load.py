@@ -11,20 +11,28 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument("source", type=argparse.FileType("r"), default=sys.stdin)
 
-    def handle(self, source):
-        reader = csv.DictReader(source)
+        parser.add_argument("--book-id-field", default="id")
+        parser.add_argument("--author-field", default="author")
+        parser.add_argument("--title-field", default="title")
+
+    def handle(self, *args, **options):
+        reader = csv.DictReader(options["source"])
 
         for row in reader:
             try:
-                author = Author.objects.get(id=int(row["id"]))
+                author = Author.objects.get(name=row[options["author_field"]])
             except Author.DoesNotExist:
-                author = Author(name=row["author"])
+                author = Author(name=row[options["author_field"]])
                 author.save()
 
             try:
-                book = Book.objects.get(id=int(row["id"]))
+                book = Book.objects.get(id=int(row[options["book_id_field"]]))
             except Book.DoesNotExist:
-                book = Book(id=row["id"], title=row["title"], author=author)
+                book = Book(
+                    id=row[options["book_id_field"]],
+                    title=row[options["title_field"]],
+                    author=author,
+                )
                 book.save()
 
             print(book)
