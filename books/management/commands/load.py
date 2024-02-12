@@ -22,7 +22,7 @@ class Command(BaseCommand):
             try:
                 author = Author.objects.get(name=row[options["author_field"]])
             except Author.DoesNotExist:
-                author = Author(name=row[options["author_field"]])
+                author = Author(name=row[options["author_field"]][:199])
                 author.save()
 
             try:
