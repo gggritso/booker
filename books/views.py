@@ -33,8 +33,11 @@ def by_id(request):
 
 
 def by_author(request):
-    authors = Author.objects.filter(name__icontains=request.GET["name"])
-    books = Book.objects.filter(author__in=authors)
+    books = Book.objects.filter(
+        author__name__icontains=request.GET["name"]
+    ).select_related("author")
+
+    authors = {book.author for book in books}
 
     return JsonResponse(
         {
