@@ -18,6 +18,20 @@ def index(request):
     )
 
 
+def by_id(request):
+    book = Book.objects.get(id=request.GET["id"])
+
+    return JsonResponse(
+        {
+            "book": {
+                "id": book.id,
+                "title": book.title,
+                "author": {"id": book.author.id, "name": book.author.name},
+            }
+        }
+    )
+
+
 def by_author(request):
     authors = Author.objects.filter(name__icontains=request.GET["name"])
     books = Book.objects.filter(author__in=authors)
